@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e-IBURIS - Deteksi Dini Risiko Tinggi Ibu Hamil</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- RESET & GLOBAL STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        :root {
+            --primary-pink: #e82561;
+            --primary-pink-hover: #c91a4e;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            scroll-behavior: smooth;
+        }
+
+        /* --- HERO CONTAINER & BACKGROUND --- */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            background: linear-gradient(135deg, #e2edff 0%, #ffffff 50%, #e2edff 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Dynamic Hospital Background Overlay */
+        .bg-image {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkGmrO1lyISJOTaHR6Ua4X5DLyraMPoc6mhWNKCx77yEI3ntvVql04vtWRnKcJLTta3qZAI689RjP86AEysE4rHV3wGLc4X16f8-_HrCeztN9Fd4P8jlhfV0nJPHSDm8Ej8ehDHWw=s1360-w1360-h1020-rw') center/cover no-repeat;
+            border-bottom-left-radius: 40px;
+            z-index: 1;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, #edf4ff 15%, rgba(237, 244, 255, 0.75) 50%, rgba(255, 255, 255, 0.1) 100%);
+            z-index: 2;
+        }
+
+        /* --- NAVIGATION BAR --- */
+        navbar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 80px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            color: var(--primary-pink);
+            font-size: 22px;
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-pink);
+            line-height: 1.1;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text span {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a.active, .nav-links a:hover {
+            color: var(--primary-pink);
+        }
+
+        .nav-links a.active {
+            border-bottom: 2px solid var(--primary-pink);
+            padding-bottom: 4px;
+        }
+
+        .btn-main {
+            background-color: var(--primary-pink);
+            color: #ffffff !important;
+            padding: 12px 24px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700 !important;
+            box-shadow: 0 8px 20px rgba(232, 37, 97, 0.25);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn-main:hover {
+            background-color: var(--primary-pink-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(232, 37, 97, 0.35);
+        }
+
+        /* --- HERO CONTENT --- */
+        .hero-body {
+            position: relative;
+            z-index: 10;
+            padding: 40px 80px 80px;
+            max-width: 650px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 800;
+            color: var(--primary-pink);
+            line-height: 1;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 28px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 20px;
+        }
+
+        .hero-desc {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* Instansi Badges */
+        .instansi-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 36px;
+        }
+
+        .instansi-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instansi-icon {
+            width: 38px;
+            height: 38px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            color: #10b981;
+            font-size: 18px;
+        }
+
+        .instansi-info p {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .instansi-info h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .divider {
+            width: 1px;
+            height: 30px;
+            background-color: #cbd5e1;
+        }
+
+        /* --- BOTTOM FEATURES CARD --- */
+        .features-wrapper {
+            position: relative;
+            z-index: 10;
+            padding: 0 80px 40px;
+        }
+
+        .features-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 28px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .feature-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding-right: 12px;
+            border-right: 1px solid #f1f5f9;
+        }
+
+        .feature-box:last-child {
+            border-right: none;
+        }
+
+        .feature-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #fecdd3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--primary-pink);
+            font-size: 20px;
+        }
+
+        .feature-text h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .feature-text p {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* --- STYLES MODAL LOGIN POP-UP --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            width: 90%;
+            max-width: 420px;
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            position: relative;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 16px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+
+        .close-btn:hover { color: #1e293b; }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .logo-icon-modal {
+            width: 50px;
+            height: 50px;
+            background: #fce7f3;
+            color: var(--primary-pink);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            color: #1e293b;
+        }
+
+        .modal-header p {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-pink);
+        }
+
+        .btn-submit-login {
+            width: 100%;
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit-login:hover { background: var(--primary-pink-hover); }
+
+        .login-message {
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .login-message.error { color: #ef4444; }
+        .login-message.success { color: #10b981; }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1024px) {
+            navbar, .hero-body, .features-wrapper {
+                padding-left: 40px;
+                padding-right: 40px;
+            }
+
+            .features-card {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .feature-box {
+                border-right: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .bg-image {
+                width: 100%;
+                opacity: 0.2;
+            }
+            .bg-overlay {
+                background: rgba(255, 255, 255, 0.85);
+            }
+            .nav-links {
+                display: none;
+            }
+            .hero-title {
+                font-size: 42px;
+            }
+            .hero-subtitle {
+                font-size: 20px;
+            }
+            .features-card {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-container" id="beranda">
+        <!-- Background Hospital Image & Overlay -->
+        <div class="bg-image"></div>
+        <div class="bg-overlay"></div>
+
+        <!-- Navbar Header -->
+        <navbar>
+            <a href="#" class="brand-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>e-IBURIS</h1>
+                    <span>Deteksi Risiko Ibu Hamil</span>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="#beranda">Beranda</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#fitur">Fitur</a></li>
+                <li><a href="#alur">Alur</a></li>
+                <li><a href="#panduan">Panduan</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+            </ul>
+
+            <!-- Tombol Pemicu Modal Login -->
+            </button>
+        </navbar>
+
+        <!-- Main Hero Content -->
+        <div class="hero-body">
+            <h1 class="hero-title">e-IBURIS</h1>
+            <h2 class="hero-subtitle">Elektronik Ibu Risiko Tinggi</h2>
+            
+            <p class="hero-desc">
+                Sistem skrining risiko ibu hamil berbasis web sesuai Buku KIA 2024 dan Kartu Skor Poedji Rochjati (KSPR) untuk mendukung deteksi dini, pencatatan digital, dan monitoring terintegrasi.
+            </p>
+
+            <!-- Instansi Badges -->
+            <div class="instansi-wrapper">
+                <div class="instansi-item">
+                    <div class="instansi-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div class="instansi-info">
+                        <p>Pemerintah Kabupaten</p>
+                        <h4>Sumba Barat</h4>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="instansi-item">
+                    <div class="instansi-icon">
+                        <i class="fa-solid fa-hospital"></i>
+                    </div>
+                    <div class="instansi-info">
+                        <p>RSU Hoba Kalla</p>
+                        <h4>Lamboya</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action Button -->
+            <button type="button" class="btn-main" onclick="bukaModalLogin()" style="padding: 16px 32px; font-size: 16px;">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Masuk ke Aplikasi
+            </button>
+        </div>
+
+        <!-- Bottom Feature Highlights -->
+        <div class="features-wrapper">
+            <div class="features-card">
+                
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-crosshairs"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Skrining Akurat</h3>
+                        <p>Deteksi risiko tinggi sesuai standar KSPR & Buku KIA 2024</p>
+                    </div>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-chart-column"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Dashboard Real-time</h3>
+                        <p>Monitoring data ibu hamil secara cepat dan akurat</p>
+                    </div>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Data Aman</h3>
+                        <p>Penyimpanan terintegrasi dan terlindungi</p>
+                    </div>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Akses Fleksibel</h3>
+                        <p>Dapat diakses kapan saja dan di mana saja</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="feature-box">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> <!-- Akhir dari hero-container -->
+
+    <!-- ======================================================= -->
+    <!-- 🟢 BAGIAN TENTANG (TARUH DI LUAR HERO CONTAINER) 🟢 -->
+    <!-- ======================================================= -->
+    <section id="tentang" style="padding: 60px 80px; max-width: 1200px; margin: 0 auto;">
+        <div style="background: #ffffff; border-radius: 24px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+            
+            <!-- Header Section -->
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+                <div style="width: 48px; height: 48px; background: #fce7f3; color: var(--primary-pink); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div>
+                    <h2 style="font-size: 26px; font-weight: 800; color: var(--text-dark);">Tentang Sistem e-IBURIS</h2>
+                    <p style="font-size: 14px; color: var(--text-muted);">Transformasi Digital Pelayanan Kesehatan Ibu & Anak</p>
+                </div>
+            </div>
+
+            <!-- Deskripsi Utama -->
+            <p style="font-size: 15px; color: #475569; line-height: 1.8; margin-bottom: 28px;">
+                <strong>e-IBURIS (Elektronik Ibu Risiko Tinggi)</strong> adalah platform inovasi pelayanan kesehatan berbasis digital yang dikembangkan untuk mempercepat, mempermudah, dan mengoptimalkan proses skrining deteksi dini risiko tinggi pada ibu hamil. Aplikasi ini dirancang khusus untuk memperkuat jaringan pelayanan kesehatan terintegrasi antara <strong>RSU Hoba Kalla Lamboya</strong> dan <strong>Pemerintah Kabupaten Sumba Barat</strong>.
+            </p>
+
+            <!-- Grid 3 Poin Utama -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                
+                <div style="background: #f8fafc; padding: 20px; border-radius: 16px; border-left: 4px solid var(--primary-pink);">
+                    <h3 style="font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-book-medical" style="color: var(--primary-pink);"></i> Standar Buku KIA 2024
+                    </h3>
+                    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+                        Menerapkan indikator kesehatan maternal terbaru sesuai petunjuk teknis Kementerian Kesehatan untuk deteksi komplikasi kehamilan.
+                    </p>
+                </div>
+
+                <div style="background: #f8fafc; padding: 20px; border-radius: 16px; border-left: 4px solid #10b981;">
+                    <h3 style="font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-calculator" style="color: #10b981;"></i> Integrasi Metode KSPR
+                    </h3>
+                    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+                        Menggunakan Kartu Skor Poedji Rochjati (KSPR) untuk penentuan otomatis tingkat risiko kehamilan (KRR, KRT, KRST) secara akurat.
+                    </p>
+                </div>
+
+                <div style="background: #f8fafc; padding: 20px; border-radius: 16px; border-left: 4px solid #0284c7;">
+                    <h3 style="font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-hospital-user" style="color: #0284c7;"></i> Pemantauan Terpadu
+                    </h3>
+                    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+                        Memudahkan kolaborasi nakes di FKTP (Puskesmas/Bidan) dan FKRTL (RS Rujukan) dalam memantau kondisi ibu hamil secara real-time.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+    <!-- ======================================================= -->
+<!-- ======================================================= -->
+    <!-- 🟢 BAGIAN FITUR UNGGULAN (FEATURE SECTION) 🟢 -->
+    <!-- ======================================================= -->
+    <section id="fitur" style="padding: 60px 80px; max-width: 1200px; margin: 0 auto;">
+        
+        <!-- Header Fitur -->
+        <div style="text-align: center; margin-bottom: 48px;">
+            <span style="background: #fce7f3; color: var(--primary-pink); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+                Layanan Utama
+            </span>
+            <h2 style="font-size: 32px; font-weight: 800; color: var(--text-dark); margin-top: 12px; margin-bottom: 8px;">
+                Fitur Unggulan e-IBURIS
+            </h2>
+            <p style="font-size: 15px; color: var(--text-dark); max-width: 600px; margin: 0 auto;">
+                Sistem pendukung keputusan terintegrasi untuk mempercepat penanganan risiko maternal secara digital.
+            </p>
+        </div>
+
+        <!-- Grid Cards Fitur -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;">
+            
+            <!-- Fitur 1 -->
+            <div class="fitur-card">
+                <div class="fitur-icon-box">
+                    <i class="fa-solid fa-file-waveform"></i>
+                </div>
+                <h3>Skrining Otomatis KSPR</h3>
+                <p>Kalkulasi otomatis Kartu Skor Poedji Rochjati (KSPR) untuk penentuan status risiko KRR, KRT, atau KRST secara real-time saat entry data.</p>
+            </div>
+
+            <!-- Fitur 2 -->
+            <div class="fitur-card">
+                <div class="fitur-icon-box">
+                    <i class="fa-solid fa-book-medical"></i>
+                </div>
+                <h3>Kuesioner Buku KIA 2024</h3>
+                <p>Formulir digital berbasis panduan terbaru Buku KIA 2024 untuk mendeteksi dini faktor penyulit dan riwayat kesehatan ibu hamil.</p>
+            </div>
+
+            <!-- Fitur 3 -->
+            <div class="fitur-card">
+                <div class="fitur-icon-box">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3>Dashboard Analytics</h3>
+                <p>Visualisasi sebaran data ibu hamil risiko tinggi berbasis grafik intuitif untuk mendukung pengambilan keputusan pihak Manajemen RS/Dinas.</p>
+            </div>
+
+            <!-- Fitur 4 -->
+            <div class="fitur-card">
+                <div class="fitur-icon-box">
+                    <i class="fa-solid fa-truck-medical"></i>
+                </div>
+                <h3>Alur Rujukan Terpadu</h3>
+                <p>Pemantauan alur rujukan dari FKTP (Puskesmas/Bidan) ke FKRTL (RSU Hoba Kalla) secara terstruktur, meminimalisir keterlambatan penanganan.</p>
+            </div>
+
+            <!-- Fitur 5 -->
+            <div class="fitur-card">
+                <div class="fitur-icon-box">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3>Hak Akses Berjenjang</h3>
+                <p>Sistem keamanan login khusus untuk Admin, Nakes/Bidan, dan Dokter Spesialis dengan batasan otorisasi data yang terlindungi.</p>
+            </div>
+
+            <!-- Fitur 6 -->
+            <div class="fitur-card">
+                <div class="fitur-icon-box">
+                    <i class="fa-solid fa-print"></i>
+                </div>
+                <h3>Laporan & Ekspor Data</h3>
+                <p>Kemudahan pencetakan kartu skor, resume medis, serta ekspor data rekapitulasi berkala untuk analisis dan pengarsipan digital.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Style CSS Tambahan Khusus Card Fitur -->
+    <style>
+      body {
+  /* Pengaturan dasar background */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  
+  /* Panggil animasi bernama 'bgSlide' selama 15 detik dan berulang terus */
+  animation: bgSlide 15s infinite;
+  
+  /* Transisi halus saat gambar berganti */
+  transition: background-image 10s ease-in-out;
+}
+
+/* Animasi Pergantian Gambar Background */
+@keyframes bgSlide {
+  0%, 100% {
+    /* Gambar Pertama */
+    background-image: url('https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkpta14Jmw_0b21ptsXQ-p-HwKMZa0kcNy0_Gg3a-8LO8NYFkaJBgnoQhDZZJim8FXiL_gqNJ_PJSZUJtUJh3NibkXkSIR6CbZ28i4wrrHUPHhWg_q7SXSxpGFN4OVr9UMxh13qToolHfM=s1360-w1360-h1020-rw');
+  }
+  33% {
+    /* Gambar Kedua */
+    background-image: url('https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnfXo_hUYlh4BY9fmbU2LiABrQYxXLxnoj_Rnh-K2WDbuuqQb_9fO2N19puuQtg49Ajek03Ao65pdP3LI8xuF69EIAKiYTzs3yD5dfIIph-BwffH0-fY6HNmjl1aYOXlLLuxQm9=s1360-w1360-h1020-rw');
+  }
+  66% {
+    /* Gambar Ketiga */
+    background-image: url('https://lh3.googleusercontent.com/gps-cs-s/AHRPTWkNQgikcSKiOlTL4_G8RJwjVlDEV8NZmcAy1NLFtqmrvABm_6jiSuwhBmUsiC6OkfdPyu-iChfrtGNcXlQ4R9-30eRPBW3UZRD3N2f5EgPkj_Xnojn5SbUKnpBqzjOCdIPpCUIh-y4hI4Hz=s1360-w1360-h1020-rw');
+  }
+}
+        .fitur-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .fitur-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(232, 37, 97, 0.12);
+            border-color: #fecdd3;
+        }
+
+        .fitur-icon-box {
+            width: 52px;
+            height: 52px;
+            background: #f1f5f9;
+            color: var(--primary-pink);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .fitur-card:hover .fitur-icon-box {
+            background: var(--primary-pink);
+            color: #ffffff;
+        }
+
+        .fitur-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .fitur-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            #fitur {
+                padding: 40px 20px !important;
+            }
+        }
+    </style>
+    <!-- ======================================================= -->
+    <!-- ======================================================= -->
+    <!-- 🟢 BAGIAN ALUR PELAYANAN (WORKFLOW SECTION) 🟢 -->
+    <!-- ======================================================= -->
+    <section id="alur" style="padding: 60px 80px; max-width: 1200px; margin: 0 auto;">
+        
+        <!-- Header Alur -->
+        <div style="text-align: center; margin-bottom: 48px;">
+            <span style="background: #e0f2fe; color: #0284c7; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+                Prosedur Sistem
+            </span>
+            <h2 style="font-size: 32px; font-weight: 800; color: var(--text-dark); margin-top: 12px; margin-bottom: 8px;">
+                Alur Deteksi & Pelayanan e-IBURIS
+            </h2>
+            <p style="font-size: 15px; color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+                Tahapan sistematis dari registrasi hingga penanganan rujukan untuk ibu hamil risiko tinggi.
+            </p>
+        </div>
+
+        <!-- Grid Langkah Alur Process -->
+        <div class="alur-grid">
+            
+            <!-- Langkah 1 -->
+            <div class="alur-card">
+                <div class="alur-number">01</div>
+                <div class="alur-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h3>Registrasi Data</h3>
+                <p>Nakes/Bidan mendaftarkan data identitas ibu hamil, domisili, dan nomor kontak ke dalam sistem e-IBURIS saat pemeriksaan ANC.</p>
+            </div>
+
+            <!-- Langkah 2 -->
+            <div class="alur-card">
+                <div class="alur-number">02</div>
+                <div class="alur-icon">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <h3>Skrining & KSPR</h3>
+                <p>Pengisian kuesioner sesuai standar Buku KIA 2024. Sistem secara otomatis menghitung skor KSPR dan mengklasifikasikan tingkat risiko.</p>
+            </div>
+
+            <!-- Langkah 3 -->
+            <div class="alur-card">
+                <div class="alur-number">03</div>
+                <div class="alur-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3>Identifikasi Risiko</h3>
+                <p>Status risiko langsung terlihat pada dashboard: <strong>KRR</strong> (Risiko Rendah), <strong>KRT</strong> (Risiko Tinggi), atau <strong>KRST</strong> (Sangat Tinggi).</p>
+            </div>
+
+            <!-- Langkah 4 -->
+            <div class="alur-card">
+                <div class="alur-number">04</div>
+                <div class="alur-icon">
+                    <i class="fa-solid fa-hospital-user"></i>
+                </div>
+                <h3>Rujukan & Monitoring</h3>
+                <p>Pasien KRT/KRST terhubung langsung ke RSU Hoba Kalla Lamboya untuk penanganan medis spesialis serta pemantauan intensif.</p>
+            </div>
+
+        </div>
+
+        <!-- Banner Info Tambahan -->
+        <div style="margin-top: 40px; background: linear-gradient(135deg, #fff5f8 0%, #edf4ff 100%); border-radius: 20px; padding: 24px 32px; border: 1px solid #fecdd3; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 46px; height: 46px; background: var(--primary-pink); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 2px;">Real-Time Monitoring</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Setiap pembaruan kondisi ibu hamil dapat dipantau langsung oleh Bidan Desa dan Tim Dokter RS.</p>
+                </div>
+            </div>
+            <a href="dashboard.php" class="btn-main" style="padding: 10px 20px; font-size: 13px; text-decoration: none;">
+    Mulai Skrining <i class="fa-solid fa-arrow-right"></i>
+</a>
+            </button>
+        </div>
+
+    </section>
+
+    <!-- Style CSS Tambahan Khusus Bagian Alur -->
+    <style>
+        .alur-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            position: relative;
+        }
+
+        .alur-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .alur-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(2, 132, 199, 0.12);
+            border-color: #bae6fd;
+        }
+
+        .alur-number {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            font-size: 28px;
+            font-weight: 800;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .alur-card:hover .alur-number {
+            color: #38bdf8;
+        }
+
+        .alur-icon {
+            width: 50px;
+            height: 50px;
+            background: #e0f2fe;
+            color: #0284c7;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .alur-card:hover .alur-icon {
+            background: #0284c7;
+            color: #ffffff;
+        }
+
+        .alur-card h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .alur-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            #alur {
+                padding: 40px 20px !important;
+            }
+        }
+    </style>
+    <!-- ======================================================= -->
+    <!-- ======================================================= -->
+    <!-- 🟢 BAGIAN PANDUAN PENGGUNA (USER GUIDE SECTION) 🟢 -->
+    <!-- ======================================================= -->
+    <section id="panduan" style="padding: 60px 80px; max-width: 1200px; margin: 0 auto;">
+        
+        <!-- Header Panduan -->
+        <div style="text-align: center; margin-bottom: 48px;">
+            <span style="background: #fef3c7; color: #d97706; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+                Pusat Bantuan
+            </span>
+            <h2 style="font-size: 32px; font-weight: 800; color: var(--text-dark); margin-top: 12px; margin-bottom: 8px;">
+                Panduan Penggunaan e-IBURIS
+            </h2>
+            <p style="font-size: 15px; color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+                Petunjuk praktis bagi tenaga kesehatan dalam mengoperasikan aplikasi e-IBURIS.
+            </p>
+        </div>
+
+        <!-- Accordion Container -->
+        <div class="panduan-container">
+            
+            <!-- Panduan 1 -->
+            <div class="panduan-item">
+                <button type="button" class="panduan-btn" onclick="togglePanduan(this)">
+                    <span style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fa-solid fa-right-to-bracket" style="color: var(--primary-pink);"></i>
+                        1. Cara Masuk / Login ke Aplikasi
+                    </span>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </button>
+                <div class="panduan-content">
+                    <ol style="padding-left: 20px; font-size: 14px; color: #475569; line-height: 1.8;">
+                        <li>Klik tombol <strong>"Masuk ke Aplikasi"</strong> pada bagian kanan atas layar atau tombol di halaman utama.</li>
+                        <li>Masukkan <strong>Username</strong> dan <strong>Password</strong> akun resmi yang telah didaftarkan oleh Administrator.</li>
+                        <li>Klik tombol <strong>"Masuk Sekarang"</strong>. Jika berhasil, Anda akan otomatis dialihkan ke Dashboard Sistem.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Panduan 2 -->
+            <div class="panduan-item">
+                <button type="button" class="panduan-btn" onclick="togglePanduan(this)">
+                    <span style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fa-solid fa-address-card" style="color: #10b981;"></i>
+                        2. Cara Menginput Data Pasien Ibu Hamil
+                    </span>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </button>
+                <div class="panduan-content">
+                    <ol style="padding-left: 20px; font-size: 14px; color: #475569; line-height: 1.8;">
+                        <li>Setelah login, buka menu <strong>"Data Ibu Hamil"</strong> di panel navigasi dashboard.</li>
+                        <li>Klik tombol <strong>"+ Tambah Data Pasien"</strong>.</li>
+                        <li>Isi data demografi pasien secara lengkap (NIK, Nama, Tanggal Lahir, Alamat, No. HP/WA, Nama Suami).</li>
+                        <li>Simpan data pasien untuk melanjutkan ke tahap Skrining/KSPR.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Panduan 3 -->
+            <div class="panduan-item">
+                <button type="button" class="panduan-btn" onclick="togglePanduan(this)">
+                    <span style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fa-solid fa-clipboard-list" style="color: #0284c7;"></i>
+                        3. Pengisian Skrining & Penentuan Skor KSPR
+                    </span>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </button>
+                <div class="panduan-content">
+                    <ol style="padding-left: 20px; font-size: 14px; color: #475569; line-height: 1.8;">
+                        <li>Pilih nama pasien, lalu klik tombol <strong>"Lakukan Skrining"</strong>.</li>
+                        <li>Jawab setiap pertanyaan kuesioner berdasarkan kondisi fisik & riwayat kehamilan (Buku KIA 2024).</li>
+                        <li>Sistem akan secara otomatis menghitung total skor KSPR dan menampilkan status risiko:
+                            <ul style="margin-top: 6px; list-style-type: disc; padding-left: 20px;">
+                                <li><strong style="color: #10b981;">KPR (Skor 2):</strong> Kelompok Risiko Rendah</li>
+                                <li><strong style="color: #f59e0b;">KRT (Skor 6-10):</strong> Kelompok Risiko Tinggi</li>
+                                <li><strong style="color: #ef4444;">KRST (Skor ≥12):</strong> Kelompok Risiko Sangat Tinggi</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Panduan 4 -->
+            <div class="panduan-item">
+                <button type="button" class="panduan-btn" onclick="togglePanduan(this)">
+                    <span style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fa-solid fa-print" style="color: #8b5cf6;"></i>
+                        4. Mencetak Resume Skrining & Kartu Skor
+                    </span>
+                    <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                </button>
+                <div class="panduan-content">
+                    <p style="font-size: 14px; color: #475569; line-height: 1.8;">
+                        Buka detail hasil skrining pasien, lalu klik tombol <strong>"Cetak Kartu Skor / Resume"</strong> untuk mengunduh dokumen dalam format PDF atau mencetaknya langsung sebagai lampiran rujukan ke RSU Hoba Kalla Lamboya.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Download Buku Panduan Card -->
+        <div style="margin-top: 36px; background: #ffffff; border-radius: 20px; padding: 24px 32px; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 48px; height: 48px; background: #fef3c7; color: #d97706; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 16px; font-weight: 700; color: var(--text-dark);">Butuh Buku Petunjuk Lengkap?</h4>
+                    <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Unduh modul manual penggunaan (PDF) e-IBURIS untuk panduan cetak offline.</p>
+                </div>
+            </div>
+            <a href="https://drive.google.com/file/d/1-vZ5ShscX4gYvr_J-3C5Y-vtJRuzHtOC/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background: #f1f5f9; color: var(--text-dark); padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;">
+    <i class="fa-solid fa-download"></i> Unduh PDF
+</a>
+        </div>
+
+    </section>
+
+    <!-- Style CSS & Javascript Khusus Bagian Panduan -->
+    <style>
+        .panduan-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panduan-item {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .panduan-btn {
+            width: 100%;
+            padding: 20px 24px;
+            background: transparent;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .panduan-btn:hover {
+            background: #f8fafc;
+        }
+
+        .arrow-icon {
+            color: #94a3b8;
+            transition: transform 0.3s ease;
+        }
+
+        .panduan-item.active .arrow-icon {
+            transform: rotate(180deg);
+            color: var(--primary-pink);
+        }
+
+        .panduan-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+            background: #fafafa;
+            padding: 0 24px;
+            border-top: 1px solid transparent;
+        }
+
+        .panduan-item.active .panduan-content {
+            max-height: 300px;
+            padding: 20px 24px;
+            border-top-color: #f1f5f9;
+        }
+
+        @media (max-width: 768px) {
+            #panduan {
+                padding: 40px 20px !important;
+            }
+        }
+    </style>
+
+    <script>
+        // Fungsi Toggle Interaktif Accordion Panduan
+        function togglePanduan(btn) {
+            var item = btn.parentElement;
+            
+            // Tutup item lain yang sedang terbuka
+            var allItems = document.querySelectorAll('.panduan-item');
+            allItems.forEach(function(el) {
+                if (el !== item) {
+                    el.classList.remove('active');
+                }
+            });
+
+            // Toggle item yang diklik
+            item.classList.toggle('active');
+        }
+    </script>
+    <!-- ======================================================= -->
+    <!-- ======================================================= -->
+    <!-- 🟢 BAGIAN KONTAK & FOOTER (CONTACT SECTION) 🟢 -->
+    <!-- ======================================================= -->
+    <section id="kontak" style="padding: 60px 80px 0; max-width: 1200px; margin: 0 auto;">
+        
+        <!-- Header Kontak -->
+        <div style="text-align: center; margin-bottom: 48px;">
+            <span style="background: #dcfce7; color: #166534; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+                Hubungi Kami
+            </span>
+            <h2 style="font-size: 32px; font-weight: 800; color: var(--text-dark); margin-top: 12px; margin-bottom: 8px;">
+                Kontak & Layanan Informasi
+            </h2>
+            <p style="font-size: 15px; color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+                Memiliki pertanyaan atau kendala teknis seputar e-IBURIS? Tim kami siap membantu Anda.
+            </p>
+        </div>
+
+        <!-- Grid 2 Kolom: Informasi Kontak & Form Pesan Cepat -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; margin-bottom: 60px;">
+            
+            <!-- Kolom Kiri: Informasi Instansi & Alamat -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                
+                <!-- Card RSU -->
+                <div class="kontak-info-card">
+                    <div class="kontak-icon">
+                        <i class="fa-solid fa-hospital"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px;">RSU Hoba Kalla Lamboya</h4>
+                        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px;">
+                            Kec. Lamboya, Kabupaten Sumba Barat, Nusa Tenggara Timur
+                        </p>
+                        <p style="font-size: 13px; color: var(--primary-pink); font-weight: 600;">
+                            <i class="fa-solid fa-phone" style="margin-right: 6px;"></i> Call Center Emergency / IGD RS
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card Dinkes / Pemkab -->
+                <div class="kontak-info-card">
+                    <div class="kontak-icon" style="background: #dcfce7; color: #16a34a;">
+                        <i class="fa-solid fa-building-shield"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px;">Dinas Kesehatan Sumba Barat</h4>
+                        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px;">
+                            Kota Waikabubak, Kabupaten Sumba Barat, NTT
+                        </p>
+                        <p style="font-size: 13px; color: #16a34a; font-weight: 600;">
+                            <i class="fa-solid fa-envelope" style="margin-right: 6px;"></i> dinkes@sumbabaratkab.go.id
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card Helpdesk WhatsApp -->
+                <div class="kontak-info-card">
+                    <div class="kontak-icon" style="background: #e0f2fe; color: #0284c7;">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px;">Bantuan Teknis & Admin App</h4>
+                        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px;">
+                            Layanan konsultasi akun, lupa password, dan kendala input data nakes.
+                        </p>
+                        <a href="https://wa.me/6285857942286" target="_blank" rel="noopener noreferrer" style="font-size: 13px; color: #0284c7; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="fa-brands fa-whatsapp"></i> Chat WhatsApp Support <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Kolom Kanan: Form Kirim Pesan Cepat -->
+            <div style="background: #ffffff; border-radius: 20px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px;">Kirim Pesan / Masukan</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Sampaikan saran atau laporan kendala sistem secara langsung.</p>
+
+                <form onsubmit="kirimPesanKontak(event)">
+                    <div style="margin-bottom: 14px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">Nama Lengkap / Instansi</label>
+                        <input type="text" required placeholder="Contoh: Bidan Maria (Puskesmas Lamboya)" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; outline: none;">
+                    </div>
+
+                    <div style="margin-bottom: 14px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">No. WhatsApp / Email</label>
+                        <input type="text" required placeholder="0812xxxxxxx" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; outline: none;">
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">Isi Pesan / Kendala</label>
+                        <textarea rows="4" required placeholder="Tuliskan pesan atau kendala Anda di sini..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; outline: none; resize: vertical;"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-main" style="width: 100%; justify-content: center; padding: 12px;">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim Pesan
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FOOTER HAK CIPTA -->
+    <footer style="background: #ffffff; border-top: 1px solid #e2e8f0; padding: 24px 80px; margin-top: 40px;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="color: var(--primary-pink); font-size: 18px;">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <span style="font-size: 13px; font-weight: 700; color: var(--text-dark);">e-IBURIS Sumba Barat</span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
+                © 2026 RSU Hoba Kalla Lamboya & Pemkab Sumba Barat. Hak Cipta Dilindungi Undang-Undang.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Style CSS & JS Tambahan Khusus Bagian Kontak -->
+    <style>
+        .kontak-info-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+
+        .kontak-info-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+        }
+
+        .kontak-icon {
+            width: 44px;
+            height: 44px;
+            background: #fce7f3;
+            color: var(--primary-pink);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            #kontak {
+                padding: 40px 20px 0 !important;
+            }
+            footer {
+                padding: 24px 20px !important;
+            }
+        }
+    </style>
+
+    <script>
+        function kirimPesanKontak(e) {
+            e.preventDefault();
+            alert("Terima kasih! Pesan Anda telah terkirim. Tim kami akan segera menindaklanjuti.");
+            e.target.reset();
+        }
+    </script>
+    <!-- ======================================================= -->
+    <!-- === MODAL POP-UP LOGIN === -->
+
+    <!-- === MODAL POP-UP LOGIN === -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="close-btn" onclick="tutupModalLogin()">&times;</span>
+            
+            <div class="modal-header">
+                <div class="logo-icon-modal">
+                    <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <h2>Masuk ke e-IBURIS</h2>
+                <p>Masukkan username dan password Anda</p>
+            </div>
+
+            <form id="formLogin" onsubmit="prosesLogin(event)">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Masukkan username" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password" required>
+                </div>
+
+                <div id="loginMessage" class="login-message"></div>
+
+                <button type="submit" class="btn-submit-login" id="btnLogin">
+                    <i class="fa-solid fa-right-to-bracket"></i> Masuk Sekarang
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- === JAVASCRIPT LOGIC === -->
+    <script>
+        // Fungsi Membuka Pop-Up Login
+        function bukaModalLogin() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        // Fungsi Menutup Pop-Up Login
+        function tutupModalLogin() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loginMessage').innerText = '';
+        }
+
+        // Menutup Modal saat mengklik di luar area kotak
+        window.onclick = function(event) {
+            var modal = document.getElementById('loginModal');
+            if (event.target == modal) {
+                tutupModalLogin();
+            }
+        }
+
+        // Memproses Login menggunakan fungsi `loginUser` di backend (code.gs)
+       function prosesLogin(e) {
+    e.preventDefault();
+    
+    var userVal = document.getElementById('username').value;
+    var passVal = document.getElementById('password').value;
+    var msgBox = document.getElementById('loginMessage');
+    var btn = document.getElementById('btnLogin');
+
+    google.script.run
+        .withSuccessHandler(function(response) {
+            btn.disabled = false;
+            if (response.success) {
+                msgBox.className = "login-message success";
+                msgBox.innerText = "Login Berhasil! Mengalihkan...";
+                window.top.location.href = "https://script.google.com/macros/s/AKfycbxLJG4bTMbIDHALi6GFRwyFiMs14ARlmdtYgv-oqBirhq-Sl9T8pvzpCnlS1ftpA27yqw/exec";
+                // Minta URL Web App langsung dari backend Apps Script
+
+                msgBox.className = "login-message error";
+                msgBox.innerText = response.message;
+            }
+        })
+        .withFailureHandler(function(err) {
+            btn.disabled = false;
+            msgBox.className = "login-message error";
+            msgBox.innerText = "Terjadi kesalahan koneksi sistem.";
+        })
+        .loginUser(userVal, passVal);
+}
+    </script>
+    <!-- Tombol Kembali ke Beranda (Back to Top) -->
+<a href="#beranda" id="btnBackToTop" title="Kembali ke Beranda" style="position: fixed; bottom: 30px; right: 30px; width: 48px; height: 48px; background: var(--primary-pink); color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; text-decoration: none; box-shadow: 0 4px 12px rgba(232, 37, 97, 0.3); z-index: 99; transition: all 0.3s ease;">
+    <i class="fa-solid fa-arrow-up"></i>
+</a>
+
+<style>
+    #btnBackToTop:hover {
+        transform: translateY(-4px);
+        background: #d91b5c;
+        box-shadow: 0 8px 20px rgba(232, 37, 97, 0.4);
+    }
+</style>
+<!-- ================= SECTION PETA RUMAH SAKIT (PALING BAWAH) ================= -->
+<section style="background-color: #f8f9fa; padding: 40px 20px; border-top: 2px solid #e9ecef;">
+  <div style="max-width: 1100px; margin: 0 auto; text-align: center;">
+    
+    <h3 style="color: #2c3e50; font-size: 20px; margin-bottom: 8px;">
+      <i class="fa-solid fa-hospital-user" style="color: #e74c3c; margin-right: 8px;"></i>Lokasi Rumah Sakit Umum Hoba Kalla
+    </h3>
+    <p style="color: #6c757d; font-size: 14px; margin-bottom: 20px;">
+      Peta lokasi Rumah Sakit Umum Hoba Kalla
+    </p>
+
+    <!-- Pembungkus Peta Responsif -->
+    <div style="position: relative; width: 100%; height: 350px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      
+      <!-- Ganti link src di bawah ini dengan link 'Sematkan Peta' dari Google Maps Rumah Sakit Anda -->
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=%211m18%211m12%211m3%211d3932.2764894122092%212d119.32502187323524%213d-9.74263090328594%212m3%211f0%212f0%213f0%213m2%211i1024%212i768%214f13.1%213m3%211m2%211s0x2c4ae35fae08cf63%3A0xcec13e1ff4fd23f%212sHoba%20Kalla%20Hospital%215e0%213m2%211sen%212sid%214v1785078439347%215m2%211sen%212sid" 
+        width="100%" 
+        height="100%" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy">
+      </iframe>
+
+    </div>
+  </div>
+</section>
+<!-- ========================================================================= -->
+</body>
+</html>
